@@ -2,7 +2,7 @@ from stack import *
 Tags=Stack()
 
 
-han=open("karim.txt",'r')
+han=open("ex2.xml",'r')
 flag=0
 
 #looping on every char in every line in xml file
@@ -21,6 +21,9 @@ for line in han:
                     #searching for ' ' and > 
                     x=line.find(' ',i+1)
                     y=line.find('>',i+1)
+
+                    if line[y-1]=='/':
+                        continue
                     if x==-1 :                   
                             tag=line[i+1:y]    
                             Tags.push(tag)   
@@ -41,8 +44,8 @@ for line in han:
                         Tags.pop()
                     else:
                         print("error in line: ",counter)
-                        print("error detected in the following line: ")
-                        print(line)  
+                        print("error detected in the following line: ",line)
+                        
                         
    
                 
