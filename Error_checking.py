@@ -77,17 +77,3 @@ def error_checking(path):
         return 1,mylist     
     
 
-path="karim.txt"
-x,y=error_checking(path)
-
-if x==1:
-    if len(y)==0:
-         print("xml isnot consistant") 
-         print("error due to not closing tags")
-    else:
-         print("xml isnot consistant") 
-         for x in range(len(y)):
-             print("error in following line:",y[x])
-             
-else:
-    print("xml is consistant")        
