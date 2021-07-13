@@ -2,7 +2,7 @@
 
 def prettify (path):
     rread = open(path, 'r+')
-    #to open read and write files
+    #to open read file
 
 
     spaces = 0
