@@ -11,35 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication,QFileDialog,QLineEdit,QInputDialog,QMessageBox
 from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharFormat
+from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharFormat,QTextCursor
 
 from minify import minify
 from prettify import prettify
 from Error_checking import error_checking
-
-
-
-
-class SyntaxHighlighter(QSyntaxHighlighter):
-    def __init__(self, parnet):
-        super().__init__(parnet)
-        self._highlight_lines = {}
-
-    def highlight_line(self, line_num, fmt):
-        if isinstance(line_num, int) and line_num >= 0 and isinstance(fmt, QTextCharFormat):
-            self._highlight_lines[line_num] = fmt
-            block = self.document().findBlockByLineNumber(line_num)
-            self.rehighlightBlock(block)
-
-    def clear_highlight(self):
-        self._highlight_lines = {}
-        self.rehighlight()
-
-    def highlightBlock(self, text):
-        blockNumber = self.currentBlock().blockNumber()
-        fmt = self._highlight_lines.get(blockNumber)
-        if fmt is not None:
-            self.setFormat(0, len(text), fmt)
 
 
 class Ui_MainWindow(object):
@@ -50,38 +26,63 @@ class Ui_MainWindow(object):
         MainWindow.resize(1060, 900)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+
         self.save = QtWidgets.QPushButton(self.centralwidget)
         self.save.setGeometry(QtCore.QRect(950, 850, 75, 23))
         self.save.setObjectName("save")
         self.save.clicked.connect(self.save_text)
+
+
         self.check_errors = QtWidgets.QPushButton(self.centralwidget)
         self.check_errors.setGeometry(QtCore.QRect(750, 850, 75, 23))
         self.check_errors.setObjectName("check_errors")
         self.check_errors.clicked.connect(self.show_errors)
+
+
         self.prettify = QtWidgets.QPushButton(self.centralwidget)
         self.prettify.setGeometry(QtCore.QRect(850, 850, 75, 23))
         self.prettify.setObjectName("prettify")
         self.prettify.clicked.connect(self.prettify_file)
+
+
         self.convert = QtWidgets.QPushButton(self.centralwidget)
         self.convert.setGeometry(QtCore.QRect(550, 850, 75, 23))
         self.convert.setObjectName("convert")
+
+
         self.minify = QtWidgets.QPushButton(self.centralwidget)
         self.minify.setGeometry(QtCore.QRect(650, 850, 75, 23))
         self.minify.setObjectName("minify")
         self.minify.clicked.connect(self.minify_file)
+
+
         self.browse = QtWidgets.QPushButton(self.centralwidget)
         self.browse.setGeometry(QtCore.QRect(510, 10, 81, 21))
         self.browse.setObjectName("browse")
         self.browse.clicked.connect(self.browsefiles)
+
+        self.findword = QtWidgets.QPushButton(self.centralwidget)
+        self.findword.setGeometry(QtCore.QRect(810, 10, 81, 21))
+        self.findword.setObjectName("Fdsadsind")
+        self.findword.clicked.connect(self.search_in_txt)
 
 
         self.filename = QtWidgets.QLineEdit(self.centralwidget)
         self.filename.setGeometry(QtCore.QRect(60, 10, 431, 20))
         self.filename.setObjectName("filename")
 
+        #find line text
+        self.find = QtWidgets.QLineEdit(self.centralwidget)
+        self.find.setGeometry(QtCore.QRect(600, 10, 200, 20))
+        self.find.setObjectName("find")
+
+
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(60, 50, 950, 750))
         self.textEdit.setObjectName("textEdit")
+
+
         self.errortext = QtWidgets.QTextEdit(self.centralwidget)
         self.errortext.setGeometry(QtCore.QRect(60, 810, 450, 70))
         self.errortext.setObjectName("textEdit")
@@ -99,13 +100,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "XML editor"))
         self.save.setText(_translate("MainWindow", "Save"))
         self.check_errors.setText(_translate("MainWindow", "Check Errors"))
         self.prettify.setText(_translate("MainWindow", "Prettify"))
         self.convert.setText(_translate("MainWindow", "Convert"))
         self.minify.setText(_translate("MainWindow", "Minify"))
         self.browse.setText(_translate("MainWindow", "Open File"))
+        self.findword.setText(_translate("MainWindow", "Find"))
 
 
     def browsefiles(self):
@@ -128,30 +130,12 @@ class Ui_MainWindow(object):
         self.textEdit.setText(prettify(filename[0]))
         print(prettify(filename[0]))
 
-
-    def popup_error(self):
-        filename = self.current_filename
-        error="12312312"
-       # error=error_checking(filename)
-        msg = QMessageBox()
-        msg.setWindowTitle("Errors Log")
-        msg.setText(error)
-        msg.setIcon(QMessageBox.Information)
-        print(error_checking(filename[0]))
-        x = msg.exec_()
     def show_errors(self):
         filename = self.current_filename
         error=""
 
         error=error_checking(filename[0])
-        print(error)
         self.errortext.setText(error)
-      #  print(error)
-
-
-
-
-
 
 
 
@@ -162,14 +146,18 @@ class Ui_MainWindow(object):
             my_text = self.textEdit.toPlainText()
             f.write(my_text)
 
-    def onTextChanged(self, text):
-        fmt = QTextCharFormat()
-        fmt.setBackground(QColor("yellow"))
-        self._highlighter.clear_highlight()
-        for e in text.split():
-            line = int(e)
-            self._highlighter.highlight_line(line, fmt)
+    def search_in_txt(self):
+        txt_to_search = self.find.text()
+        try:
+            result = self.textEdit.find(txt_to_search)
 
+            if result == False:
+                # move cursor to the beginning and restart search
+                self.textEdit.moveCursor(QtGui.QTextCursor.Start)
+                self.textEdit.find(txt_to_search)
+        except:
+            self.statusbar.showMessage("This is the last iteration founded")
+        return
 
 if __name__ == "__main__":
     import sys
