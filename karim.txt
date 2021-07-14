@@ -1,11 +1,3 @@
- <synset >
-         <lex_filenum >40 </lex_filenum>
-         <word> get </word>
-         <pointer1 e> H </pointer>
-         <pointer2 r> </pointer2>
-         <pointer3 r> related</pointer>
-         <frame />
-         <def2> pu </def>
-         <example>What did you get at the toy store?</example>
-     	 
- </synset>
+ <frame f_num="21"/>
+         <def>make more compact by or as if by pressing</def2>
+         <example>compress the data</example2>
