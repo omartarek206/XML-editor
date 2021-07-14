@@ -9,32 +9,33 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication,QFileDialog,QLineEdit,QInputDialog
+from PyQt5.QtWidgets import QDialog, QApplication,QFileDialog,QLineEdit,QInputDialog,QMessageBox
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharFormat
 
 from minify import minify
+from prettify import prettify
 
 
 
 class SyntaxHighlighter(QSyntaxHighlighter):
-    def __init__(self, parent):
-        super(SyntaxHighlighter, self).__init__(parent)
-        self._highlight_lines = dict()
+    def __init__(self, parnet):
+        super().__init__(parnet)
+        self._highlight_lines = {}
 
-    def highlight_line(self, line, fmt):
-        if isinstance(line, int) and line >= 0 and isinstance(fmt, QTextCharFormat):
-            self._highlight_lines[1] = fmt
-            tb = self.document().findBlockByLineNumber(1)
-            self.rehighlightBlock(tb)
+    def highlight_line(self, line_num, fmt):
+        if isinstance(line_num, int) and line_num >= 0 and isinstance(fmt, QTextCharFormat):
+            self._highlight_lines[line_num] = fmt
+            block = self.document().findBlockByLineNumber(line_num)
+            self.rehighlightBlock(block)
 
     def clear_highlight(self):
-        self._highlight_lines = dict()
+        self._highlight_lines = {}
         self.rehighlight()
 
     def highlightBlock(self, text):
-        line = self.currentBlock().blockNumber()
-        fmt = self._highlight_lines.get(line)
+        blockNumber = self.currentBlock().blockNumber()
+        fmt = self._highlight_lines.get(blockNumber)
         if fmt is not None:
             self.setFormat(0, len(text), fmt)
 
@@ -54,10 +55,11 @@ class Ui_MainWindow(object):
         self.check_errors = QtWidgets.QPushButton(self.centralwidget)
         self.check_errors.setGeometry(QtCore.QRect(750, 850, 75, 23))
         self.check_errors.setObjectName("check_errors")
-        self.check_errors.clicked.connect(self.onTextChanged)
+        self.check_errors.clicked.connect(self.popup_error)
         self.prettify = QtWidgets.QPushButton(self.centralwidget)
         self.prettify.setGeometry(QtCore.QRect(850, 850, 75, 23))
         self.prettify.setObjectName("prettify")
+        self.prettify.clicked.connect(self.prettify_file)
         self.convert = QtWidgets.QPushButton(self.centralwidget)
         self.convert.setGeometry(QtCore.QRect(550, 850, 75, 23))
         self.convert.setObjectName("convert")
@@ -116,6 +118,27 @@ class Ui_MainWindow(object):
     def minify_file(self):
         filename = self.current_filename
         self.textEdit.setText(minify(filename[0]))
+
+    def prettify_file(self):
+        filename = self.current_filename
+
+        self.textEdit.setText(prettify(filename[0]))
+
+
+    def popup_error(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("errors in line")
+        msg.setText("5555555555555555555555555555555555555555555555555"
+                    "\n""532131245231555"
+                    "5513412412455"
+                    "5512412455"
+                    "555555521312355555555555555555555555555555")
+        msg.setIcon(QMessageBox.Information)
+
+        x = msg.exec_()
+
+
+
 
 
 
