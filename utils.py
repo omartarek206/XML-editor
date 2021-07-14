@@ -14,17 +14,43 @@ def leafy(text):
             break
 
 
-def leaf(node):
+def isLeaf(tag):
     """
-    Check if node is a leaf, and print it
+    Check if tag is a leaf
     """
-    start = node.find(">")
-    end = node.find("<", start)
-    return (0,"") if end == -1 else (1, node[start+1:end])
+    return 0 if tag.find("<", tag.find(">")) == -1 else 1
 
 
-def has_siblings(node,text):
+def notLeaf(tag):
     """
-    Check if this node has any siblings
+    Check if tag is not a leaf
     """
-    pass
+    return isLeaf(tag) ^ 1
+
+
+def notComment(tag):
+    """
+    Return false if tag is a comment
+    """
+    return 1 if not (tag.find("<?") == 0 or tag.find("<!") == 0) else 0
+
+
+def strr(tag):
+    """
+    Return tag without braces
+    """
+    return tag[1:-1] if notLeaf(tag) else tag
+
+
+def dictify(tag):
+    """
+    Convert tag into key value tuple
+    """
+    return tag[tag.find('<')+1 : tag.find('>')], tag[tag.find('>')+1 : tag.find("</")]
+
+
+def hasSiblings(tag,text):
+    """
+    Check if this tag has any siblings
+    """
+    
