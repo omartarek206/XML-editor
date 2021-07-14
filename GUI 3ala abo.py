@@ -15,6 +15,8 @@ from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharF
 
 from minify import minify
 from prettify import prettify
+from Error_checking import error_checking
+
 
 
 
@@ -55,7 +57,7 @@ class Ui_MainWindow(object):
         self.check_errors = QtWidgets.QPushButton(self.centralwidget)
         self.check_errors.setGeometry(QtCore.QRect(750, 850, 75, 23))
         self.check_errors.setObjectName("check_errors")
-        self.check_errors.clicked.connect(self.popup_error)
+        self.check_errors.clicked.connect(self.show_errors)
         self.prettify = QtWidgets.QPushButton(self.centralwidget)
         self.prettify.setGeometry(QtCore.QRect(850, 850, 75, 23))
         self.prettify.setObjectName("prettify")
@@ -80,6 +82,9 @@ class Ui_MainWindow(object):
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(60, 50, 950, 750))
         self.textEdit.setObjectName("textEdit")
+        self.errortext = QtWidgets.QTextEdit(self.centralwidget)
+        self.errortext.setGeometry(QtCore.QRect(60, 810, 450, 70))
+        self.errortext.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -113,8 +118,6 @@ class Ui_MainWindow(object):
 
 
 
-
-
     def minify_file(self):
         filename = self.current_filename
         self.textEdit.setText(minify(filename[0]))
@@ -123,19 +126,27 @@ class Ui_MainWindow(object):
         filename = self.current_filename
 
         self.textEdit.setText(prettify(filename[0]))
+        print(prettify(filename[0]))
 
 
     def popup_error(self):
+        filename = self.current_filename
+        error="12312312"
+       # error=error_checking(filename)
         msg = QMessageBox()
-        msg.setWindowTitle("errors in line")
-        msg.setText("5555555555555555555555555555555555555555555555555"
-                    "\n""532131245231555"
-                    "5513412412455"
-                    "5512412455"
-                    "555555521312355555555555555555555555555555")
+        msg.setWindowTitle("Errors Log")
+        msg.setText(error)
         msg.setIcon(QMessageBox.Information)
-
+        print(error_checking(filename[0]))
         x = msg.exec_()
+    def show_errors(self):
+        filename = self.current_filename
+        error=""
+
+        error=error_checking(filename[0])
+        print(error)
+        self.errortext.setText(error)
+      #  print(error)
 
 
 
