@@ -73,7 +73,7 @@ def error_checking(path):
     if flag==1:
         return value
     elif flag==0 and con_or_not==1:
-        return value
+        return "No Errors Found"
     else:
         return value
 
