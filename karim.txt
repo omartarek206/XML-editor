@@ -1,3 +1,4 @@
  <frame f_num="21"/>
-         <def>make more compact by or as if by pressing</def2>
-         <example>compress the data</example2>
+         <def>make more compact by or as if by pressing</def>
+         <example>compress the data</example>
+<j></j>
