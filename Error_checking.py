@@ -15,6 +15,7 @@ def error_checking(path):
     for line in text:
         counter=counter+1
         for i in range (len(line)):
+            
         
             #searching for <      
          if line[i]=='<':
