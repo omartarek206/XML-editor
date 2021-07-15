@@ -6,9 +6,12 @@ def leafy(text):
     while True:
         if i < len(text):
             if text[i].find("<") ==-1:
-                text[i] = text[i-1] + text[i] + text[i+1]
-                text.remove(text[i-1])
-                text.remove(text[i])
+                if i:
+                    text[i] = text[i-1] + text[i] + text[i+1]
+                    text.remove(text[i-1])
+                    text.remove(text[i])
+                else:
+                    text.remove(text[i])
             i+=1
         else:
             break
@@ -49,8 +52,16 @@ def dictify(tag):
     return tag[tag.find('<')+1 : tag.find('>')], tag[tag.find('>')+1 : tag.find("</")]
 
 
-def hasSiblings(tag,text):
+def areSiblings(text):
     """
-    Check if this tag has any siblings
+    Check if this text is a set of siblings
     """
+    openning = text[0]
+    closing = "/" + text[0]
+    end = text.index(closing)
+    next = end+1
+    if next<len(text):
+        if text[next] == openning:
+            return 1
+    return 0
     

@@ -1,26 +1,25 @@
 import utils as u
 
 
-myfile = open("../../samples/easy.xml",'r')
+myfile = open("../../samples/data-sample.xml",'r')
 text = [i.strip() for i in myfile.read().split("\n")]
 json = {}
 
 
 # remove comments and unnecesary tags
-
 modded = list(filter(u.notComment, text))
-
 u.leafy(modded)
 
-children = list(filter(u.isLeaf, modded))
-print(children)
+""" children = list(filter(u.isLeaf, modded))
+print(children) """
+
 """ parents = list(filter(u.notLeaf, modded))
 print(parents) """
 bare = list(map(u.strr, modded))
 print(bare)
 
 def jsonify(bare):
-    # Output dict, child list, openning and closing tags
+    # Output dict, openning and closing tags
     out = {}
     openning = bare[0]
     closing = "/" + bare[0]
@@ -31,8 +30,20 @@ def jsonify(bare):
             out[k] = v
     # Perform recursive call otherwise
     else:
-        end = bare.index(closing)
-        child = bare[1:end]
+        # Check for the presense of siblings, and add them to a list
+        outList = []
+        if u.areSiblings(bare):
+            i = 0
+            keyTag = bare[0]
+            while i < len(bare):
+                start = bare[i:].index(bare[i]) + i + 1
+                finish = bare[start:].index("/" + bare[i]) + start
+                element = jsonify(bare[start:finish])
+                outList.append(element)
+                i = finish + 1
+            out[keyTag] = outList
+            return out
+        child = bare[1:bare.index(closing)]
         out[openning] = jsonify(child)
     return out
         
