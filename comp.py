@@ -1,84 +1,88 @@
+x={} 
+
+
 def find(s, ch):
     return [i for i, ltr in enumerate(s) if ltr == ch]
-my_list=[]
-s_det=[]
-new_index=0
-old_index=0
-x={} 
-x[' ']='s'
-counter=2
-f=open("compress_test.txt",'w') 
-han=open("karim.txt",'r')
-text=han.read()
-splits = text.split()
-for i   in splits:
-    if i in x:
-        f.write(x[i])
-        f.write(x[' '])
-    else:
-        t=i
-        x[t]=str(counter)
-        f.write(x[t])
-        f.write(x[' '])
-        counter=counter+1
 
-f.close()
 
-key_list = list(x.keys())
-val_list = list(x.values())
- 
-k=open("return.txt",'w') 
+def compress(path):
+    compressed_file=""
+    s_det=[]
+   
+    x[' ']='s'
+    counter=2
+    
 
-Z=open("compress_test.txt",'r')
-rr=Z.read()
-s_det=find(rr,'s')
+    han=open(path,'r')
+    text=han.read()
+    splits = text.split()
+    for i   in splits:
+        if i in x:
+            compressed_file=compressed_file+x[i]+x[' ']
+        else:
+            t=i
+            x[t]=str(counter)
+            compressed_file=compressed_file+x[t]+x[' ']
+            counter=counter+1
+
+    return compressed_file        
 
 
 
-r=open("compress_test.txt",'r')
+def decompress(path):
+    
+    my_list=[]
+    decompressed_file=""
 
-count=0
-for line in r:
-    for i in range (len(line)):
-        if count<len(s_det):
-            """ if line[i]=='s':
-                k.write(' ') """
-            
-            if count==0:
+    key_list = list(x.keys())
+    val_list = list(x.values())
+    
+
+
+    Z=open(path,'r')
+    rr=Z.read()
+
+    s_det=find(rr,'s')
+
+
+
+    r=open(path,'r') 
+    
+
+    count=0
+
+    for line in r:
+        for i in range (len(line)):
+            if count<len(s_det):        
+                if count==0:
                     txt=line[0:s_det[count]]
                     count=count+1
                     my_list.append(txt)
-            else:
+                    
+                            
+                else:
+                
                     txt=line[s_det[count-1]+1:s_det[count]]
+                    
                     count=count+1
                     my_list.append(txt) 
 
+    list_count=0
+
+
+
+    kk=open(path,'r')    
+    for line in kk:
+        for i in range (len(line)):
+            if line[i]=='s':
+                decompressed_file=decompressed_file+' '
                 
                 
-           
-            
-            
-            
-print("yes")
-list_count=0
+            else:
+                if list_count<len(my_list):
+                    position = val_list.index(my_list[list_count])
+                    decompressed_file=decompressed_file+key_list[position]
+                    list_count=list_count+1
+                        
+    return(decompressed_file)
 
-
-
-rr=open("compress_test.txt",'r')
-
-
-for line in rr:
-    for i in range (len(line)):
-        if line[i]=='s':
-            k.write(' ')
-            
-        else:
-            if list_count<len(my_list):
-                position = val_list.index(my_list[list_count])
-                k.write(key_list[position])    
-                list_count=list_count+1
-       
-k.close()        
-
-
-    
