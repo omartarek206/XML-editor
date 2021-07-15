@@ -16,6 +16,7 @@ from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharF
 from minify import minify
 from prettify import prettify
 from Error_checking import error_checking
+from comp import *
 
 
 class Ui_MainWindow(object):
@@ -64,8 +65,18 @@ class Ui_MainWindow(object):
 
         self.findword = QtWidgets.QPushButton(self.centralwidget)
         self.findword.setGeometry(QtCore.QRect(810, 10, 81, 21))
-        self.findword.setObjectName("Fdsadsind")
+        self.findword.setObjectName("Find")
         self.findword.clicked.connect(self.search_in_txt)
+
+        self.comp = QtWidgets.QPushButton(self.centralwidget)
+        self.comp.setGeometry(QtCore.QRect(910, 10, 60, 21))
+        self.comp.setObjectName("Compress")
+        self.comp.clicked.connect(self.compress_file)
+
+        self.decomp = QtWidgets.QPushButton(self.centralwidget)
+        self.decomp.setGeometry(QtCore.QRect(980, 10, 60, 21))
+        self.decomp.setObjectName("Decompress")
+        self.decomp.clicked.connect(self.decompress_file)
 
 
         self.filename = QtWidgets.QLineEdit(self.centralwidget)
@@ -108,6 +119,9 @@ class Ui_MainWindow(object):
         self.minify.setText(_translate("MainWindow", "Minify"))
         self.browse.setText(_translate("MainWindow", "Open File"))
         self.findword.setText(_translate("MainWindow", "Find"))
+        self.comp.setText(_translate("MainWindow", "Compress"))
+        self.decomp.setText(_translate("MainWindow", "Decomp."))
+
 
 
     def browsefiles(self):
@@ -128,7 +142,9 @@ class Ui_MainWindow(object):
         filename = self.current_filename
 
         self.textEdit.setText(prettify(filename[0]))
-        print(prettify(filename[0]))
+
+
+    #show errors fn
 
     def show_errors(self):
         filename = self.current_filename
@@ -139,13 +155,13 @@ class Ui_MainWindow(object):
 
 
 
-
+    #saving the text fn
     def save_text(self):
         filename = QFileDialog.getSaveFileName()
         with open(filename[0], 'w') as f:
             my_text = self.textEdit.toPlainText()
             f.write(my_text)
-
+    #search fn
     def search_in_txt(self):
         txt_to_search = self.find.text()
         try:
@@ -158,6 +174,17 @@ class Ui_MainWindow(object):
         except:
             self.statusbar.showMessage("This is the last iteration founded")
         return
+    def compress_file(self):
+        compressed=""
+        filename = self.current_filename
+        compressed=compress(filename[0])
+        self.textEdit.setText(compressed)
+        print(compressed)
+    def decompress_file(self):
+        filename = QFileDialog.getOpenFileName()
+        decompressed = ""
+        decompressed =decompress(filename[0])
+        self.textEdit.setText(decompressed)
 
 if __name__ == "__main__":
     import sys
