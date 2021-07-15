@@ -65,3 +65,23 @@ def areSiblings(text):
             return 1
     return 0
     
+
+class str2(str):
+    def __repr__(self):
+        return ''.join(('"', super().__repr__()[1:-1], '"'))
+
+
+def ignore(text):
+    out1, out2 = [], []
+    for tag in text:
+        start = tag.find(" ")
+        end = tag.find(">")
+        new_tag = tag.replace(tag[start:end], "") if start != -1 else tag
+        out1.append(new_tag)
+    for tag in out1:
+        start = tag.find("<!--")
+        end = tag.find("-->") +3
+        new_tag = tag.replace(tag[start:end], "") if start != -1 else tag
+        out2.append(new_tag)
+    return out2
+    

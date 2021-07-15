@@ -16,6 +16,7 @@ from PyQt5.QtGui import QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharF
 from minify import minify
 from prettify import prettify
 from Error_checking import error_checking
+from JSON_Parser import *
 from comp import *
 
 
@@ -50,6 +51,7 @@ class Ui_MainWindow(object):
         self.convert = QtWidgets.QPushButton(self.centralwidget)
         self.convert.setGeometry(QtCore.QRect(550, 850, 75, 23))
         self.convert.setObjectName("convert")
+        self.convert.clicked.connect(self.convert_JSON)
 
 
         self.minify = QtWidgets.QPushButton(self.centralwidget)
@@ -185,6 +187,21 @@ class Ui_MainWindow(object):
         decompressed = ""
         decompressed =decompress(filename[0])
         self.textEdit.setText(decompressed)
+
+    def convert_JSON(self):
+
+        path_read = self.current_filename
+        mypath = path_read[0]
+        print(mypath)
+        mydict = xml_to_dict(mypath)
+        print(mydict)
+        filename = QFileDialog.getSaveFileName()
+        dict_to_json(filename[0], mydict)
+        text = open(filename[0], 'r')
+        json = text.read()
+        # json = prettify_json(text)
+        self.textEdit.setText(json)
+
 
 if __name__ == "__main__":
     import sys
