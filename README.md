@@ -10,9 +10,6 @@
   
 ---
 
-<br/>
-<br/>
-
 # Features  
 ## [Check XML](Error_checking.py)  
 ### The error checking process uses a stack for the check and follows this pipeline:  
