@@ -17,7 +17,7 @@ from minify import minify
 from prettify import prettify
 from Error_checking import error_checking
 from JSON_Parser import *
-from comp import *
+from Compress_JSON import *
 
 
 class Ui_MainWindow(object):
