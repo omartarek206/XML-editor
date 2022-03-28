@@ -13,20 +13,20 @@
 # Features  
 ## [Check XML](Error_checking.py)  
 ### The error checking process uses a stack for the check and follows this pipeline:  
-1-	Import stack and initialize flags to be used later inside algorithm.  
-2-	Make sure that text is left stripped then split into a list of lines..  
-3-	Loop the characters of each line.  
-4-	Check the character is a start of tag while making sure that the tag is not a comment (<? or <!).   
-5- If the tag is open tag:  
-- Find index of first space and “>” (to determine name of the tag).  
-- Check if the tag is open and close in the same time (will not be pushed as it doesn’t cause a problem).
-- Push the tag into stack.
+1. Import stack and initialize flags to be used later inside algorithm.  
+2. Make sure that text is left stripped then split into a list of lines..  
+3. Loop the characters of each line.  
+4. Check the character is a start of tag while making sure that the tag is not a comment (<? or <!).   
+5. If the tag is open tag:  
+    - Find index of first space and “>” (to determine name of the tag).  
+    - Check if the tag is open and close in the same time (will not be pushed as it doesn’t cause a problem).
+    - Push the tag into stack.
 
-6-	If the tag is closed:
-- Pop the top most from stack and comparing it with the closed one to determine error.  
+6. If the tag is closed:
+    - Pop the top most from stack and comparing it with the closed one to determine error.  
 
-7-	Check stack is empty for no errors (no extra open tags).  
-8-	Returning no error found
+7. Check stack is empty for no errors (no extra open tags).  
+8. Returning no error found
 or returning the error.
 
 ---
@@ -34,30 +34,30 @@ or returning the error.
 ## [Prettify](prettify.py)  
 ### The prettify process follows this pipeline:  
 
-1- Opening file and initializing variables:
-- Create spaces variable: to store in it number of spaces for each line
-- Creating previous variable: to determine if the previous tag is open or close
+1. Opening file and initializing variables:
+    - Create spaces variable: to store in it number of spaces for each line
+    - Creating previous variable: to determine if the previous tag is open or close
 
-2- Loop in every line in file and make sure that it is left stripped.
+2. Loop in every line in file and make sure that it is left stripped.
 
-3- Determining indeces of “<”, “/” and ”>” to use them later.
+3. Determining indeces of “<”, “/” and ”>” to use them later.
 
-4- Checking if the line is a comment or a data version tag to avoid shifting.
+4. Checking if the line is a comment or a data version tag to avoid shifting.
 
-5- Setting prev to open(to run the algorithm for them) for the next line if the tag is comment or data.
+5. Setting prev to open(to run the algorithm for them) for the next line if the tag is comment or data.
 
-6- If line contains open and close tags in the same time:  
+6. If line contains open and close tags in the same time:  
 It will be shifted if the previous is open only.
 
-7- If line contains close tag only:   
+7. If line contains close tag only:   
 It will be shifted backwards if the previous one is close only
 
-8- If line contains open tag only:  
+8. If line contains open tag only:  
 It will be shifted forward if the previous one is open only
 
-9- Writing spaces before each line according to algorithm checks.
+9. Writing spaces before each line according to algorithm checks.
 
-10- Returning the new prettified string to be written in the file 
+10. Returning the new prettified string to be written in the file 
 
 ---
 
